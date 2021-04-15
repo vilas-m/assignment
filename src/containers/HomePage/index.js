@@ -1,22 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getUsers,
-  getPosts,
-  setUser,
-  setPost,
-  getComments,
-} from "../../redux/actions";
+import { setUserPost, getComments } from "../../redux/actions";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import { Typography as T } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
-    minWidth: '90%',
-    maxWidth: '90%',
+    minWidth: "90%",
+    maxWidth: "90%",
     margin: 5,
   },
   title: {
@@ -24,17 +18,13 @@ const useStyles = makeStyles({
   },
 });
 
-const HomePage = (props) => {
+const HomePage = () => {
   const classes = useStyles();
+  const users = useSelector((state) => state.users);
+  const posts = useSelector((state) => state.posts);
   const dispatch = useDispatch();
-  let users = useSelector((state) => state.users);
-  let posts = useSelector((state) => state.posts);
-  let uniqueUsers = {};
 
-  useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getPosts());
-  }, []);
+  let uniqueUsers = {};
 
   let getUserName = (userId) => {
     if (!uniqueUsers[userId]) {
@@ -50,15 +40,12 @@ const HomePage = (props) => {
 
   let handlUserClick = (e, post) => {
     e.stopPropagation();
-    dispatch(setUser(post.userId));
-    props.changePage("user");
+    dispatch(setUserPost(post));
   };
 
   let handleCardClick = (post) => {
-    dispatch(setUser(post.userId));
-    dispatch(setPost(post));
+    dispatch(setUserPost(post));
     dispatch(getComments(post.id));
-    props.changePage("post" );
   };
 
   return (
@@ -66,17 +53,19 @@ const HomePage = (props) => {
       {posts.map((post, index) => {
         return (
           <Card className={classes.root} key={index}>
-            <CardContent onClick={() => handleCardClick(post)}>
-              <Typography variant="h5" component="h2">
-                {post.title}
-              </Typography>
-              <Typography className={classes.pos} color="textSecondary">
-                Posted by
-                <Button onClick={(e) => handlUserClick(e, post)}>
-                  {getUserName(post.userId)}
-                </Button>
-              </Typography>
-            </CardContent>
+            <Link to="/post" style={{ textDecoration: "none" }}>
+              <CardContent onClick={() => handleCardClick(post)}>
+                <T variant="h5" component="h2">
+                  {post.title}
+                </T>
+                <T className={classes.pos} color="textSecondary">
+                  Posted by{" "}
+                  <Link onClick={(e) => handlUserClick(e, post)} to="/user">
+                    {getUserName(post.userId)}
+                  </Link>
+                </T>
+              </CardContent>
+            </Link>
           </Card>
         );
       })}

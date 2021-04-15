@@ -1,25 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import HomePage from "../src/containers/HomePage";
 import User from "../src/containers/User";
 import Post from "../src/containers/Post";
+import { useDispatch } from "react-redux";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { getUsers, getPosts } from "./redux/actions";
 
 function App() {
-  let [page, setPage] = useState("home");
+  const dispatch = useDispatch();
 
-  let changePage = (page) => {
-    setPage(page);
-  };
-
-  let renderSwitch = (param) => {
-    switch (param) {
-      case "home":
-        return <HomePage changePage={changePage} />;
-      case "user":
-        return <User changePage={changePage} />;
-      case "post":
-        return <Post changePage={changePage} />;
-    }
-  };
+  useEffect(() => {
+    dispatch(getUsers());
+    dispatch(getPosts());
+  });
 
   return (
     <div
@@ -33,7 +26,19 @@ function App() {
         marginBottom: 30,
       }}
     >
-      {renderSwitch(page)}
+      <Router>
+        <Switch>
+          <Route path="/post">
+            <Post />
+          </Route>
+          <Route path="/user">
+            <User />
+          </Route>
+          <Route path="/">
+            <HomePage />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

@@ -2,17 +2,18 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
+import { Typography as T } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import { CardHeader, IconButton } from "@material-ui/core";
-import Comment from "./Comment";
+import Comment from "../../components/Comment";
+import { Link, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
-    minWidth: '90%',
+    minWidth: "90%",
     maxWidth: "90%",
-    height: '90%',
+    height: "90%",
   },
   title: {
     fontSize: 18,
@@ -25,50 +26,46 @@ const useStyles = makeStyles({
     marginBottom: 30,
   },
   commentList: {
-      height: '100%',
-  }
+    height: "100%",
+  },
 });
 
 function Post(props) {
   const classes = useStyles();
-  let post = useSelector((state) => state.post);
-  let userId = useSelector((state) => state.selectedUser);
+  let userPost = useSelector((state) => state.userPost);
   let users = useSelector((state) => state.users);
   let comments = useSelector((state) => state.comments);
   let [user, setUser] = useState({});
+  let history = useHistory();
 
   useEffect(() => {
-    user = users.find((i) => i.id === userId);
+    user = users.find((i) => i.id === userPost.userId);
     setUser(user);
   }, [users]);
-
-  let goBack = () => {
-    props.changePage("home");
-  };
 
   return (
     <Card className={classes.root}>
       <CardHeader
         action={
-          <IconButton aria-label="back" onClick={() => goBack()}>
+          <IconButton aria-label="back" onClick={() => history.goBack()}>
             <KeyboardBackspaceIcon />
           </IconButton>
         }
+        title={userPost.title}
       />
       <CardContent className={classes.commentList}>
-        <Typography variant="h5" component="h2">
-          {post.title}
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          Posted by {user ? user.username : ""}
-        </Typography>
-        <Typography variant="body2" component="p">
-          {post.body}
-        </Typography>
+        <T className={classes.pos} color="textSecondary">
+          Posted by <Link to="/user"> {user ? user.username : ""}</Link>
+        </T>
+        <br></br>
+        <T variant="body2" component="p">
+          {userPost.body}
+        </T>
         <hr></hr>
-        <Typography className={classes.pos} color="textSecondary">
-          Comments:
-        </Typography>
+        <T className={classes.pos} color="textSecondary">
+          Comments: <br></br>
+          <br></br>
+        </T>
         <div>
           {comments.map((comment, index) => {
             return <Comment comment={comment} index={index} />;

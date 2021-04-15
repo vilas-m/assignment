@@ -1,9 +1,10 @@
 import {
   GET_USERS,
-  SET_USER,
-  SET_POST,
+//   SET_USER,
+//   SET_POST,
   GET_POSTS,
   GET_COMMENTS,
+  SET_USER_POST,
 } from "../constants/action-types";
 import axios from "axios";
 
@@ -18,12 +19,16 @@ export function getUsers() {
   };
 }
 
-export function setUser(userId) {
-  return { type: SET_USER, payload: userId };
-}
+// export function setUser(userId) {
+//   return { type: SET_USER, payload: userId };
+// }
 
-export function setPost(post) {
-  return { type: SET_POST, payload: post };
+// export function setPost(post) {
+//   return { type: SET_POST, payload: post };
+// }
+
+export function setUserPost(post) {
+  return { type: SET_USER_POST, payload: post };
 }
 
 export function getPosts() {

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
+import { Typography as T } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import { CardHeader, IconButton } from "@material-ui/core";
-import Select from "react-select";
+import { useHistory } from "react-router-dom";
+import Search from "../../components/Search";
 
 const useStyles = makeStyles({
   root: {
@@ -24,30 +25,25 @@ const useStyles = makeStyles({
     minWidth: 700,
     top: 0,
   },
-  select: {
-    width: 500,
+  searchBar: {
+    margin: 15,
   },
 });
 
 function User(props) {
   const classes = useStyles();
-  let userId = useSelector((state) => state.selectedUser);
   let users = useSelector((state) => state.users);
+  let userPost = useSelector((state) => state.userPost);
   let [user, setUser] = useState({});
+  let history = useHistory();
 
   useEffect(() => {
-    let user = users.find((i) => i.id === userId);
+    let user = users.find((i) => i.id === userPost.userId);
     setUser(user);
   }, []);
 
-  let goBack = () => {
-    props.changePage("home");
-  };
-
   let changeUser = (newUser) => {
-    let user = users.find(
-      (i) => i.username.toLowerCase() === newUser.toLowerCase()
-    );
+    let user = users.find((i) => i.username.toLowerCase() === newUser);
     if (user) {
       setUser(user);
     }
@@ -56,53 +52,38 @@ function User(props) {
   return (
     <>
       <Card className={classes.root}>
-        <Select
-          classname={classes.select}
-          options={users.map((i) => {
-            return { value: i.username, label: i.username };
-          })}
-          onChange={(e) => {
-            changeUser(e.value);
-          }}
-        />
+        <div className={classes.searchBar}>
+          <Search users={users} changeUser={changeUser} />
+        </div>
         <CardHeader
           action={
-            <IconButton aria-label="settings" onClick={() => goBack()}>
+            <IconButton aria-label="settings" onClick={() => history.goBack()}>
               <KeyboardBackspaceIcon />
             </IconButton>
           }
+          title={user ? user.name : ""}
+          subheader={user ? user.username : ""}
         />
         <CardContent>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            {user.username}
-          </Typography>
-          <Typography variant="h4" component="h2">
-            {user.name}
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            {user.website}  <address><i>{user.email} </i></address>
-          </Typography>
+          <T className={classes.pos} color="textSecondary">
+            {user ? user.website : ""}
+            <address>
+              <i>{user ? user.email : ""} </i>
+            </address>
+          </T>
           <hr></hr>
-          <Typography variant="body2" color="textSecondary">
+          <T variant="body2" color="textSecondary">
             Company Details: <br></br>
-          </Typography>
-          <Typography variant="h5" component="h2">
-            {user.company ? user.company.name : ""}
-          </Typography>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            {user.company ? user.company.bs : ""}
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            {user.company ? user.company.catchPhrase : ""}
-          </Typography>
+          </T>
+          <T variant="h6" component="h2">
+            {user ? (user.company ? user.company.name : "") : ""}
+          </T>
+          <T className={classes.title} color="textSecondary" gutterBottom>
+            {user ? (user.company ? user.company.bs : "") : ""}
+          </T>
+          <T className={classes.pos} color="textSecondary">
+            {user ? (user.company ? user.company.catchPhrase : "") : ""}
+          </T>
         </CardContent>
       </Card>
     </>

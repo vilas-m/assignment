@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import { Typography as T } from "@material-ui/core";
 
 const useStyles = makeStyles({
   title: {
@@ -20,19 +20,15 @@ let Comment = ({ comment, index }) => {
 
   return (
     <div className={classes.comment} key={index}>
-      <Typography className={classes.title} color="primary" gutterBottom>
+      <T className={classes.title} color="primary" gutterBottom>
         {comment.name}
-      </Typography>
-      <Typography className={classes.pos} color="textSecondary">
+      </T>
+      <T className={classes.pos} color="textSecondary">
         {comment.body}
-      </Typography>
-      <Typography
-        className={classes.posEmail}
-        color="textSecondary"
-        gutterBottom
-      >
+      </T>
+      <T className={classes.posEmail} color="textSecondary" gutterBottom>
         <address>{comment.email}</address>
-      </Typography>
+      </T>
     </div>
   );
 };
