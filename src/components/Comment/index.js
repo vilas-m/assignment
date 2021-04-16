@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 
 let Comment = ({ comment, index }) => {
   const classes = useStyles();
-
+  console.log(index);
   return (
     <div className={classes.comment} key={index}>
       <T className={classes.title} color="primary" gutterBottom>
@@ -27,7 +27,7 @@ let Comment = ({ comment, index }) => {
         {comment.body}
       </T>
       <T className={classes.posEmail} color="textSecondary" gutterBottom>
-        <address>{comment.email}</address>
+        <>{comment.email}</>
       </T>
     </div>
   );

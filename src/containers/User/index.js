@@ -40,7 +40,7 @@ function User(props) {
   useEffect(() => {
     let user = users.find((i) => i.id === userPost.userId);
     setUser(user);
-  }, []);
+  }, [users, userPost]);
 
   let changeUser = (newUser) => {
     let user = users.find((i) => i.username.toLowerCase() === newUser);
@@ -67,9 +67,9 @@ function User(props) {
         <CardContent>
           <T className={classes.pos} color="textSecondary">
             {user ? user.website : ""}
-            <address>
+            <>
               <i>{user ? user.email : ""} </i>
-            </address>
+            </>
           </T>
           <hr></hr>
           <T variant="body2" color="textSecondary">

@@ -5,7 +5,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography as T } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -23,6 +23,7 @@ const HomePage = () => {
   const users = useSelector((state) => state.users);
   const posts = useSelector((state) => state.posts);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   let uniqueUsers = {};
 
@@ -46,6 +47,7 @@ const HomePage = () => {
   let handleCardClick = (post) => {
     dispatch(setUserPost(post));
     dispatch(getComments(post.id));
+    history.push("/post");
   };
 
   return (
@@ -53,19 +55,17 @@ const HomePage = () => {
       {posts.map((post, index) => {
         return (
           <Card className={classes.root} key={index}>
-            <Link to="/post" style={{ textDecoration: "none" }}>
-              <CardContent onClick={() => handleCardClick(post)}>
-                <T variant="h5" component="h2">
-                  {post.title}
-                </T>
-                <T className={classes.pos} color="textSecondary">
-                  Posted by{" "}
-                  <Link onClick={(e) => handlUserClick(e, post)} to="/user">
-                    {getUserName(post.userId)}
-                  </Link>
-                </T>
-              </CardContent>
-            </Link>
+            <CardContent onClick={() => handleCardClick(post)}>
+              <T variant="h5" component="h2">
+                {post.title}
+              </T>
+              <T className={classes.pos} color="textSecondary">
+                Posted by{" "}
+                <Link onClick={(e) => handlUserClick(e, post)} to="/user">
+                  {getUserName(post.userId)}
+                </Link>
+              </T>
+            </CardContent>
           </Card>
         );
       })}

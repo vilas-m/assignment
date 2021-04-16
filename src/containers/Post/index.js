@@ -39,9 +39,9 @@ function Post(props) {
   let history = useHistory();
 
   useEffect(() => {
-    user = users.find((i) => i.id === userPost.userId);
+    let user = users.find((i) => i.id === userPost.userId);
     setUser(user);
-  }, [users]);
+  }, [users, userPost]);
 
   return (
     <Card className={classes.root}>
